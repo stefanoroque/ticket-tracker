@@ -3,43 +3,48 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}Social Network{% endblock %}</title>
+        <title>{% block title %}Ticket Tracker{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+        <link href="{% static 'ticket_tracker/styles.css' %}" rel="stylesheet">
     </head>
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{% url 'index' %}">Quarantine Social</a>
-          
-            <div>
-              <ul class="navbar-nav mr-auto">
-
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' username=user.username %}"><strong>{{ user.username }}</strong></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                      </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'following' %}">Following</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
-                {% endif %}
-              </ul>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Stef's Ticket Tracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">New Project</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">All Projects</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Create Ticket</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">All Tickets</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'signin' %}">Sign-in</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Register</a>
+                </li>
+            {% endif %}
+            </ul>
             </div>
-          </nav>
+        </div>
+        </nav>
         
         <div class="body">
             {% block body %}
