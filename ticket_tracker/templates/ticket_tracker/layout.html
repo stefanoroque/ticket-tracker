@@ -11,7 +11,7 @@
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Stef's Ticket Tracker</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Stef's Ticket Tracker</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -19,7 +19,7 @@
             <ul class="navbar-nav">
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="#">New Project</a>
@@ -38,7 +38,7 @@
                 <a class="nav-link" href="{% url 'signin' %}">Sign-in</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Register</a>
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
             </ul>

@@ -1,0 +1,67 @@
+{% extends "ticket_tracker/layout.html" %}
+
+{% block body %}
+
+<div class="container">
+    {% if message %}
+        <!-- TODO: Change this to an alert -->
+        <div>{{ message }}</div>
+    {% endif %}
+
+
+    <div class="container mt-5 mb-3 border border-secondary rounded">
+        <form action="{% url 'register' %}" method="post">
+            <h1 class="h3 m-3 font-weight-normal text-center">Register a New Account</h1>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="user_username">Username</label>
+                <input type="text" autofocus class="form-control" id="user_username" name="username" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="user_firstname">First Name</label>
+                <input type="text" class="form-control" id="user_firstname" name="first_name" placeholder="Enter first name">
+            </div>
+            <div class="form-group">
+                <label for="user_lastname">Last Name</label>
+                <input type="text" class="form-control" id="user_lastname" name="last_name" placeholder="Enter last name">
+            </div>
+            <div class="form-group">
+                <label for="user_email">Email address</label>
+                <input type="email" class="form-control" id="user_email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. 🥺 👉🏽👈🏽</small>
+            </div>
+            <div class="form-group">
+                <label for="user_role">Role</label>
+                <select class="form-control" id="user_role" name="role">
+                    <option>Developer</option>
+                    <option>Project Manager</option>
+                    <option>Submitter</option>
+                    <option>Administrator</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="user_password">Password</label>
+                <input type="password" class="form-control" id="user_password" name="password" placeholder="Enter password">
+            </div>
+            <div class="form-group">
+                <label for="user_confirm_password">Confirm Password</label>
+                <input type="password" class="form-control" id="user_confirm_password" name="confirmation" placeholder="Confirm password">
+            </div>
+
+            <!-- <p class="lead">
+                <input class="btn btn-primary" type="submit" value="Register">
+            </p> -->
+            <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">Register</button>
+        </form>
+    </div>
+
+    <style>
+        .container {
+            max-width: 800px;
+        }
+    </style>
+
+    Already have an account? <a href="{% url 'signin' %}">Sign-in here.</a>
+</div>
+
+{% endblock %}

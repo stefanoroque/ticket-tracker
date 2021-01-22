@@ -5,6 +5,7 @@
 <div class="container"></div>
 
     {% if message %}
+        <!-- TODO: change this to an alert -->
         <div>{{ message }}</div>
     {% endif %}
 
@@ -30,7 +31,7 @@
         }
     </style>
 
-    Don't have an account? <a href="#">Register here.</a>
+    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
 </div>
 
 {% endblock %}

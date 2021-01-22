@@ -35,3 +35,33 @@ def signin_view(request):
             })
     else:
         return render(request, "ticket_tracker/signin.html")
+
+def register(request):
+    #TODO: have this function create a new user in the database
+    if request.method == "POST":
+        username = request.POST["username"]
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        email = request.POST["email"]
+        role = request.POST["role"]
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+
+        # Ensure password matches confirmation
+        if password != confirmation:
+            return render(request, "network/register.html", {
+                "message": "Passwords must match."
+            })
+
+        # Attempt to create new user
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, "network/register.html", {
+                "message": "Username already taken."
+            })
+        login(request, user)
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "ticket_tracker/register.html")
