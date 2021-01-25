@@ -4,8 +4,9 @@
 
 <div class="container">
     {% if message %}
-        <!-- TODO: Change this to an alert -->
-        <div>{{ message }}</div>
+        <div class="alert alert-warning mt-2" role="alert">
+            {{ message }}
+        </div>
     {% endif %}
 
 
@@ -13,7 +14,8 @@
         <form action="{% url 'register' %}" method="post">
             <h1 class="h3 m-3 font-weight-normal text-center">Register a New Account</h1>
             {% csrf_token %}
-            <div class="form-group">
+            {{ form.as_p }}
+            <!-- <div class="form-group">
                 <label for="user_username">Username</label>
                 <input type="text" autofocus class="form-control" id="user_username" name="username" placeholder="Enter username">
             </div>
@@ -46,7 +48,7 @@
             <div class="form-group">
                 <label for="user_confirm_password">Confirm Password</label>
                 <input type="password" class="form-control" id="user_confirm_password" name="confirmation" placeholder="Confirm password">
-            </div>
+            </div> -->
 
             <!-- <p class="lead">
                 <input class="btn btn-primary" type="submit" value="Register">
