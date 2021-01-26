@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from .models import User
-from .forms import NewRegisterForm
+from .forms import NewRegisterForm, NewSigninForm
 
 # Create your views here.
 
@@ -20,21 +20,39 @@ def index(request):
 def signin_view(request):
     if request.method == "POST":
 
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        # Take in the data the user submitted and save it as form
+        signin_form = NewSigninForm(request.POST)
 
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+        # Check if form data is valid (server-side)
+        if signin_form.is_valid():
+
+            # Isolate the data from the 'cleaned' version of the form
+            username = signin_form.cleaned_data["username"]
+            password = signin_form.cleaned_data["password"]
+
+            # Attempt to sign user in
+            user = authenticate(request, username=username, password=password)
+
+            # Check if authentication successful
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse("index"))
+            else:
+                return render(request, "ticket_tracker/signin.html", {
+                    "message": "Invalid username and/or password.",
+                    "form": signin_form
+                })
+        
         else:
-            return render(request, "ticket_tracket/signin.html", {
-                "message": "Invalid username and/or password."
+            # If the form is invalid, re-render the page with existing information.
+            return render(request, "ticket_tracker/signin.html", {
+                "form": signin_form
             })
+
     else:
-        return render(request, "ticket_tracker/signin.html")
+        return render(request, "ticket_tracker/signin.html", {
+                "form": NewSigninForm()
+            })
 
 def register(request):
     #TODO: have this function create a new user in the database
@@ -55,21 +73,32 @@ def register(request):
             password = register_form.cleaned_data["password"]
             confirmation = register_form.cleaned_data["confirmation"]
 
-            print(username)
-            print(first_name)
-            print(last_name)
-            print(email)
-            print(role)
-            print(password)
-            print(confirmation)
+            # Ensure password matches confirmation
+            if password != confirmation:
+                return render(request, "ticket_tracker/register.html", {
+                    "message": "Passwords must match.",
+                    "form": register_form
+                })
 
-            return render(request, "ticket_tracker/register.html", {
-                "form": NewRegisterForm()
+            # Attempt to create new user
+            try:
+                user = User.objects.create_user(username=username, 
+                                                first_name=first_name, 
+                                                last_name=last_name,
+                                                email=email,
+                                                role=role,
+                                                password=password)
+                user.save()
+            except IntegrityError:
+                return render(request, "ticket_tracker/register.html", {
+                    "message": "Username already taken.",
+                    "form": register_form
+                })
+
+            return render(request, "ticket_tracker/signin.html", {
+                "message": "You have successfully registered an account."
             })
-        
 
-            # Redirect user to list of tasks
-            return HttpResponseRedirect(reverse("tasks:index"))
 
         else:
             
@@ -79,46 +108,11 @@ def register(request):
             })
 
 
-
-
-
-
-
-        # username = request.POST["username"]
-        # first_name = request.POST["first_name"]
-        # last_name = request.POST["last_name"]
-        # email = request.POST["email"]
-        # role = request.POST["role"]
-        # password = request.POST["password"]
-        # confirmation = request.POST["confirmation"]
-
-        
-
-        # # Ensure that all of the form fields are filled out
-        # for entry in request.POST:
-        #     if request.POST[entry] == '':
-        #         return render(request, "ticket_tracker/register.html", {
-        #         "message": "All form fields must be filled in."
-        #     })
-
-        # # Ensure password matches confirmation
-        # if password != confirmation:
-        #     return render(request, "ticket_tracker/register.html", {
-        #         "message": "Passwords must match."
-        #     })
-
-        # Attempt to create new user
-        try:
-            pass
-            #user = User.objects.create_user(username, email, password)
-            # user.save()
-        except IntegrityError:
-            return render(request, "network/register.html", {
-                "message": "Username already taken."
-            })
-        # login(request, user)
-        return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "ticket_tracker/register.html", {
                 "form": NewRegisterForm()
             })
+
+def signout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
