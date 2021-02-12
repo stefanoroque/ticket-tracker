@@ -1,0 +1,30 @@
+{% extends "ticket_tracker/layout.html" %}
+
+{% block body %}
+
+<div class="container">
+    {% if message %}
+        <div class="alert alert-warning mt-2" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+
+
+    <div class="container mt-5 mb-3 border border-secondary rounded">
+        <form action="{% url 'register' %}" method="post">
+            <h1 class="h3 m-3 font-weight-normal text-center">Create a New Project</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">Create Project</button>
+        </form>
+    </div>
+
+    <style>
+        .container {
+            max-width: 800px;
+        }
+        
+    </style>
+</div>
+
+{% endblock %}

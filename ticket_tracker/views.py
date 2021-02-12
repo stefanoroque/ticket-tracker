@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from .models import User
-from .forms import NewRegisterForm, NewSigninForm
+from .forms import NewRegisterForm, NewSigninForm, NewProjectForm
 
 # Create your views here.
 
@@ -55,7 +55,6 @@ def signin_view(request):
             })
 
 def register(request):
-    #TODO: have this function create a new user in the database
     if request.method == "POST":
 
         # Take in the data the user submitted and save it as form
@@ -116,3 +115,63 @@ def register(request):
 def signout(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+
+def new_project(request):
+    if request.method == "POST":
+        pass
+
+        # # Take in the data the user submitted and save it as form
+        # project_form = NewProjectForm(request.POST)
+
+        # # Check if form data is valid (server-side)
+        # if project_form.is_valid():
+
+    #         # Isolate the data from the 'cleaned' version of the form
+    #         username = register_form.cleaned_data["username"]
+    #         first_name = register_form.cleaned_data["first_name"]
+    #         last_name = register_form.cleaned_data["last_name"]
+    #         email = register_form.cleaned_data["email"]
+    #         role = register_form.cleaned_data["role"]
+    #         password = register_form.cleaned_data["password"]
+    #         confirmation = register_form.cleaned_data["confirmation"]
+
+    #         # Ensure password matches confirmation
+    #         if password != confirmation:
+    #             return render(request, "ticket_tracker/register.html", {
+    #                 "message": "Passwords must match.",
+    #                 "form": register_form
+    #             })
+
+    #         # Attempt to create new user
+    #         try:
+    #             user = User.objects.create_user(username=username, 
+    #                                             first_name=first_name, 
+    #                                             last_name=last_name,
+    #                                             email=email,
+    #                                             role=role,
+    #                                             password=password)
+    #             user.save()
+    #         except IntegrityError:
+    #             return render(request, "ticket_tracker/register.html", {
+    #                 "message": "Username already taken.",
+    #                 "form": register_form
+    #             })
+
+    #         return render(request, "ticket_tracker/signin.html", {
+    #             "message": "You have successfully registered an account."
+    #         })
+
+
+    #     else:
+            
+    #         # If the form is invalid, re-render the page with existing information.
+    #         return render(request, "ticket_tracker/register.html", {
+    #             "form": register_form
+    #         })
+
+
+    else:
+        return render(request, "ticket_tracker/new_project.html", {
+                "form": NewProjectForm()
+            })

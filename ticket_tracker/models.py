@@ -11,7 +11,7 @@ class Project(models.Model):
     # Short description of the project
     description = models.TextField()
     # Users who are assigned to this project
-    assigned_users = models.ManyToManyField(User)
+    assigned_users = models.ManyToManyField(User, related_name="users")
 
 
 class Ticket(models.Model):

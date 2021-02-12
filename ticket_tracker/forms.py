@@ -1,4 +1,5 @@
 from django import forms
+from .models import User
 
 ROLE_CHOICES =( 
     ("Developer", "Developer"), 
@@ -26,4 +27,21 @@ class NewRegisterForm(forms.Form):
 class NewSigninForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}), label='')
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}), label='')
+    
+
+class NewProjectForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Project Name'}), label='')
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Project Description', "rows":5, "cols":20}), label='')
+    
+    all_users = User.objects.all()
+    user_options = []
+    # Create option list of users that can be assigned to a project
+    for u in all_users:
+        user_tuple = (u.id, u.first_name + " " + u.last_name)
+        user_options.append(user_tuple)
+
+    # TODO: Change this to a multiple select dropdown box
+    assigned_users = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, label='Assigned Users',
+                                          choices=user_options)
+    
     
