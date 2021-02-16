@@ -2,14 +2,14 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from .models import User
+from .models import User, Project
 from .forms import NewRegisterForm, NewSigninForm, NewProjectForm
 
 # Create your views here.
@@ -119,59 +119,58 @@ def signout(request):
 
 def new_project(request):
     if request.method == "POST":
-        pass
 
-        # # Take in the data the user submitted and save it as form
-        # project_form = NewProjectForm(request.POST)
+        # Take in the data the user submitted and save it as form
+        project_form = NewProjectForm(request.POST)
 
-        # # Check if form data is valid (server-side)
-        # if project_form.is_valid():
+        # Check if form data is valid (server-side)
+        if project_form.is_valid():
 
-    #         # Isolate the data from the 'cleaned' version of the form
-    #         username = register_form.cleaned_data["username"]
-    #         first_name = register_form.cleaned_data["first_name"]
-    #         last_name = register_form.cleaned_data["last_name"]
-    #         email = register_form.cleaned_data["email"]
-    #         role = register_form.cleaned_data["role"]
-    #         password = register_form.cleaned_data["password"]
-    #         confirmation = register_form.cleaned_data["confirmation"]
+            # Isolate the data from the 'cleaned' version of the form
+            name = project_form.cleaned_data["name"]
+            description = project_form.cleaned_data["description"]
+            assigned_users = project_form.cleaned_data["assigned_users"]
 
-    #         # Ensure password matches confirmation
-    #         if password != confirmation:
-    #             return render(request, "ticket_tracker/register.html", {
-    #                 "message": "Passwords must match.",
-    #                 "form": register_form
-    #             })
+            print(name)
+            print(description)
+            print(assigned_users)
 
-    #         # Attempt to create new user
-    #         try:
-    #             user = User.objects.create_user(username=username, 
-    #                                             first_name=first_name, 
-    #                                             last_name=last_name,
-    #                                             email=email,
-    #                                             role=role,
-    #                                             password=password)
-    #             user.save()
-    #         except IntegrityError:
-    #             return render(request, "ticket_tracker/register.html", {
-    #                 "message": "Username already taken.",
-    #                 "form": register_form
-    #             })
+            # Attempt to create new project
+            try:
+                proj = Project(name=name, description=description)
+                proj.save()
+                proj.assigned_users.set(assigned_users)
+                proj.save()
 
-    #         return render(request, "ticket_tracker/signin.html", {
-    #             "message": "You have successfully registered an account."
-    #         })
+            except IntegrityError:
+                return render(request, "ticket_tracker/new_project.html", {
+                    "message": "Something went wrong.",
+                    "form": project_form
+                })
 
-
-    #     else:
+            # Project created successfully, bring user to the newly created project's page
+            return redirect('project', project_name=proj.name)
             
-    #         # If the form is invalid, re-render the page with existing information.
-    #         return render(request, "ticket_tracker/register.html", {
-    #             "form": register_form
-    #         })
+
+
+        else:
+            
+            # If the form is invalid, re-render the page with existing information.
+            return render(request, "ticket_tracker/new_project.html", {
+                "form": project_form
+            })
 
 
     else:
         return render(request, "ticket_tracker/new_project.html", {
                 "form": NewProjectForm()
             })
+
+def project(request, project_name):
+    desired_project = Project.objects.filter(name=project_name).first()
+    assigned_users = desired_project.assigned_users.all()
+
+    return render(request, "ticket_tracker/project.html", {
+            "desired_project": desired_project,
+            "assigned_users": assigned_users
+        })

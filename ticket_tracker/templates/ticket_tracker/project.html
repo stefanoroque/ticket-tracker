@@ -1,0 +1,14 @@
+{% extends "ticket_tracker/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container">
+    <h1>PROJECT</h1>
+    <p>Project ID:  {{ desired_project.id }}</p>
+    <p>Project Name:  {{ desired_project.name }}</p>
+    <p>Project Description:  {{ desired_project.description }}</p>
+    <p>Assigned Users:  {{ assigned_users }}</p>
+</div>
+
+<script src="{% static 'ticket_tracker/test.js' %}"></script>
+{% endblock %}
