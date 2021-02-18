@@ -152,7 +152,6 @@ def new_project(request):
             return redirect('project', project_name=proj.name)
             
 
-
         else:
             
             # If the form is invalid, re-render the page with existing information.
@@ -174,3 +173,7 @@ def project(request, project_name):
             "desired_project": desired_project,
             "assigned_users": assigned_users
         })
+
+
+def all_projects(request):
+    return render(request, "ticket_tracker/all_projects.html")

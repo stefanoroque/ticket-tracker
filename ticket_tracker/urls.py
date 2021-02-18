@@ -8,4 +8,5 @@ urlpatterns = [
     path("signout", views.signout, name="signout"),
     path("new_project", views.new_project, name="new_project"),
     path("project/<str:project_name>", views.project, name="project"),
+    path("all_projects", views.all_projects, name="all_projects")
 ]

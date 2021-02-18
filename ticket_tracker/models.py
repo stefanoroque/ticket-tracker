@@ -7,7 +7,7 @@ class User(AbstractUser):
 
 class Project(models.Model):
     # The name of the project
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
     # Short description of the project
     description = models.TextField()
     # Users who are assigned to this project
