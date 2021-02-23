@@ -24,105 +24,49 @@
 <link href="{% static 'ticket_tracker/all_projects.css' %}" rel="stylesheet">
 
 {% block body %}
-  
   <main class="container">
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
       <h1 class="display-4">All Projects</h1>
-      <p class="lead">SOme snetance here about the projects</p>
     </div>
   
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-      <div class="col">
-        <div class="card mb-4 shadow-sm">
-        <div class="card-header">
-          <h4 class="my-0 fw-normal">Free</h4>
+      {% for project in projects %}
+        <div class="col">
+          <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 fw-normal">{{ project.name }}</h4>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title pricing-card-title">{{ project.assigned_users.count }} Assigned Users</h1>
+            <p>{{ project.description }}</p>
+            <button type="button" class="w-100 btn btn-lg btn-primary">Go To Project</button>
+          </div>
+          </div>
         </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-          <ul class="list-unstyled mt-3 mb-4">
-            <li>10 users included</li>
-            <li>2 GB of storage</li>
-            <li>Email support</li>
-            <li>Help center access</li>
-          </ul>
-          <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
-        </div>
-      </div>
-      </div>
-      <div class="col">
-        <div class="card mb-4 shadow-sm">
-        <div class="card-header">
-          <h4 class="my-0 fw-normal">Pro</h4>
-        </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-          <ul class="list-unstyled mt-3 mb-4">
-            <li>20 users included</li>
-            <li>10 GB of storage</li>
-            <li>Priority email support</li>
-            <li>Help center access</li>
-          </ul>
-          <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
-        </div>
-      </div>
-      </div>
-      <div class="col">
-        <div class="card mb-4 shadow-sm">
-        <div class="card-header">
-          <h4 class="my-0 fw-normal">Enterprise</h4>
-        </div>
-        <div class="card-body">
-          <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-          <ul class="list-unstyled mt-3 mb-4">
-            <li>30 users included</li>
-            <li>15 GB of storage</li>
-            <li>Phone and email support</li>
-            <li>Help center access</li>
-          </ul>
-          <button type="button" class="w-100 btn btn-lg btn-primary">Contact us</button>
-        </div>
-      </div>
-      </div>
+      {% endfor %}
     </div>
-  
-    <footer class="pt-4 my-md-5 pt-md-5 border-top">
-      <div class="row">
-        <div class="col-12 col-md">
-          <img class="mb-2" src="../assets/brand/bootstrap-logo.svg" alt="" width="24" height="19">
-          <small class="d-block mb-3 text-muted">&copy; 2017–2021</small>
-        </div>
-        <div class="col-6 col-md">
-          <h5>Features</h5>
-          <ul class="list-unstyled text-small">
-            <li><a class="link-secondary" href="#">Cool stuff</a></li>
-            <li><a class="link-secondary" href="#">Random feature</a></li>
-            <li><a class="link-secondary" href="#">Team feature</a></li>
-            <li><a class="link-secondary" href="#">Stuff for developers</a></li>
-            <li><a class="link-secondary" href="#">Another one</a></li>
-            <li><a class="link-secondary" href="#">Last time</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md">
-          <h5>Resources</h5>
-          <ul class="list-unstyled text-small">
-            <li><a class="link-secondary" href="#">Resource</a></li>
-            <li><a class="link-secondary" href="#">Resource name</a></li>
-            <li><a class="link-secondary" href="#">Another resource</a></li>
-            <li><a class="link-secondary" href="#">Final resource</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md">
-          <h5>About</h5>
-          <ul class="list-unstyled text-small">
-            <li><a class="link-secondary" href="#">Team</a></li>
-            <li><a class="link-secondary" href="#">Locations</a></li>
-            <li><a class="link-secondary" href="#">Privacy</a></li>
-            <li><a class="link-secondary" href="#">Terms</a></li>
-          </ul>
-        </div>
-      </div>
-    </footer>
   </main>
+
+  <ul class="pagination justify-content-center">
+    {% if projects.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ projects.previous_page_number }}">Previous</a></li>
+    {% endif %}
+
+    {% for num in projects.paginator.page_range %}
+        {% if projects.number == num %}
+            <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+
+        {% elif num > projects.number|add:'-3' and num < projects.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if projects.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ projects.next_page_number }}">Next</a></li>
+    {% endif %}
+  </ul>
+
+  
 
 <script src="{% static 'ticket_tracker/test.js' %}"></script>
 {% endblock %}

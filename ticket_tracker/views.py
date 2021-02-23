@@ -12,6 +12,9 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Project
 from .forms import NewRegisterForm, NewSigninForm, NewProjectForm
 
+# Constants
+NUM_PROJECTS_PER_PAGE = 9
+
 # Create your views here.
 
 def index(request):
@@ -176,4 +179,14 @@ def project(request, project_name):
 
 
 def all_projects(request):
-    return render(request, "ticket_tracker/all_projects.html")
+    # Fetch all the projects in the database
+    all_projects = Project.objects.all().order_by('name')
+    
+    paginator = Paginator(all_projects, NUM_PROJECTS_PER_PAGE)
+    page = request.GET.get('page')
+
+    projects = paginator.get_page(page)
+
+    return render(request, "ticket_tracker/all_projects.html", {
+            "projects": projects
+        })
