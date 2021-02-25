@@ -39,7 +39,7 @@
           <div class="card-body">
             <h3 class="card-title pricing-card-title">{{ project.assigned_users.count }} Assigned Users</h1>
             <p>{{ project.description }}</p>
-            <button type="button" class="w-100 btn btn-lg btn-primary">Go To Project</button>
+            <button type="button" class="w-100 btn btn-lg btn-primary" onclick="window.location.href='{% url 'project' project_name=project.name %}'">Go To Project</button>
           </div>
           </div>
         </div>
